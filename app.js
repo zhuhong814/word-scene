@@ -1,9 +1,9 @@
-import {cloudPanel,initCloud,notifyCloudChange} from './cloud-ui.mjs?v=20261110-5';
+import {cloudPanel,initCloud,notifyCloudChange} from './cloud-ui.mjs?v=20261110-6';
 import {lessons} from './lessons.mjs';
-import {dateKey,sessionFor,passage,canComplete,streak,validState} from './core.mjs?v=20261110-5';
+import {dateKey,sessionFor,passage,canComplete,streak,validState} from './core.mjs?v=20261110-6';
 import {parkArt} from './art.mjs';
-import {spellingHints,wordPicture} from './word-memory.mjs?v=20261110-5';
-import {loadProgress,persistProgress,checkSpelling,recordSpelling} from './progress.mjs?v=20261110-5';
+import {spellingHints,wordPicture} from './word-memory.mjs?v=20261110-6';
+import {loadProgress,persistProgress,checkSpelling,recordSpelling} from './progress.mjs?v=20261110-6';
 
 const $=s=>document.querySelector(s);
 const browserStorage={getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)};
@@ -17,6 +17,7 @@ let today=dateKey(),session=sessionFor(state,today,lessons.length),showTranslati
 let spellWord=null,spellIndex=null,spellAssisted=false,spellSubmitted=false;
 let utterance=null,speechRun=0,recorder=null,recordStream=null,recordUrl=null,recordTimer=null,recordPending=false,recordGeneration=0;
 const dialog=$('#modal');
+let focusCloud=false;
 function save(){
   try{
     if(storageIssue)throw Error('Unreadable previous progress');
@@ -154,7 +155,7 @@ document.addEventListener('click',event=>{
   const button=event.target.closest('[data-action]');if(!button)return;const {action}=button.dataset,word=button.dataset.word;
   const w=word?lessons.flatMap(l=>l.words).find(w=>w.word===word):null;
   switch(action){
-    case 'cloud':dialog.close();navigate('course');break;
+    case 'cloud':dialog.close();if(route()==='course')$('#cloud-panel')?.scrollIntoView({block:'start'});else{focusCloud=true;navigate('course');}break;
     case 'settings':settings();break;
     case 'spell':openSpelling(word,button.dataset.index!==undefined&&button.dataset.index!==''?Number(button.dataset.index):null);break;
     case 'spell-audio':speak(spellWord);break;
@@ -192,7 +193,7 @@ document.addEventListener('change',async event=>{
 });
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 dialog.addEventListener('close',()=>{stopSpeech();if(['words','today','course'].includes(route()))render();});
-window.addEventListener('hashchange',()=>{if(dialog.open)dialog.close();render();window.scrollTo(0,0);$('#app').focus({preventScroll:true});});
+window.addEventListener('hashchange',()=>{if(dialog.open)dialog.close();render();if(focusCloud){focusCloud=false;$('#cloud-panel')?.scrollIntoView({block:'start'});}else window.scrollTo(0,0);$('#app').focus({preventScroll:true});});
 function refreshDay(){if(dateKey()!==today){today=dateKey();session=sessionFor(state,today,lessons.length);if(dialog.open)dialog.close();save();render();}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopSpeech();endRecording();}else refreshDay();});
 setInterval(refreshDay,30000);
@@ -200,6 +201,6 @@ window.addEventListener('pagehide',()=>{stopSpeech();cleanupRecording();});
 render();if(!storageIssue&&(!loaded.found||(!hadToday&&session)))save();else if(storageIssue)toast('无法读取旧进度，已暂停覆盖。请恢复已有备份。');
 if('serviceWorker' in navigator&&isSecureContext)navigator.serviceWorker.register('./sw.js').catch(()=>toast('离线缓存未启用，联网时仍可使用。'));
 
-document.querySelector('.page-footer').textContent='词间 · 20261110-5 · 云端足迹版';
+document.querySelector('.page-footer').textContent='词间 · 20261110-6 · 云端足迹版';
 
 initCloud({storage:browserStorage,getState:()=>{if(storageIssue)throw Error('Unreadable local progress');return state;},applyState:next=>{persistProgress(browserStorage,next);state=next;storageIssue=false;saveFailed=false;today=dateKey();session=sessionFor(state,today,lessons.length);if(dialog.open)dialog.close();render();},download:(data,name)=>{const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`${name}-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}});
