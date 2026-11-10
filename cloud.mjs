@@ -26,10 +26,11 @@ export class CloudProgress {
   constructor({client,storage,getState,applyState,onStatus}){
     Object.assign(this,{client,storage,getState,applyState,onStatus});
     this.user=null;this.remote=null;this.ready=false;this.busy=false;this.conflict=false;this.pending=false;this.epoch=0;
+    try{this.baseline=JSON.parse(storage.getItem(cloudMetaKey)||'null');}catch{this.baseline=null;}
   }
   status(kind,message){this.onStatus({kind,message,user:this.user,remote:this.remote});}
-  meta(){try{return JSON.parse(this.storage.getItem(cloudMetaKey)||'null');}catch{return null;}}
-  remember(row){this.storage.setItem(cloudMetaKey,JSON.stringify({userId:this.user.id,revision:row.revision,signature:signature(row.progress)}));}
+  meta(){return this.baseline;}
+  remember(row){const next={userId:this.user.id,revision:row.revision,signature:signature(row.progress)};this.storage.setItem(cloudMetaKey,JSON.stringify(next));this.baseline=next;}
   async read(){
     const {data,error}=await this.client.from('wordscene_progress').select('progress,revision,updated_at').eq('user_id',this.user.id).maybeSingle();
     if(error)throw error;return data;
