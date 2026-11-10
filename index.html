@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f6f5ef">
+  <meta name="description" content="每天几个词，一起走进生活。雅思主题情景英语学习。">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="词间">
+  <title>词间 Wordscene · 在生活里学英语</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css?v=20261110-4">
+</head>
+<body>
+  <div id="save-warning" class="save-warning-bar" role="alert" hidden><span data-save-status></span> <button data-action="export">导出进度</button></div>
+  <aside class="sidebar"><a class="brand" href="#today"><span class="brand-icon">w<span>·</span></span><span>词间<small>WORDSCENE</small></span></a><p class="sidebar-tag">Little words.<br>Wider worlds.</p><nav class="desktop-nav" aria-label="主导航"></nav><div class="sidebar-foot"><span class="tiny-dot"></span> 每天一点，慢慢走远。<small>YOUR DAILY ENGLISH RITUAL</small></div></aside>
+  <div class="workspace"><header class="topbar"><a class="mobile-brand" href="#today">词间 <span>wordscene</span></a><span class="desktop-heading">在生活里，遇见英语。</span><button class="text-btn" id="cloud-badge" data-action="cloud">登录云端</button><button class="pill" data-action="settings" aria-label="学习设置">IELTS · 情景英语 <span>⌄</span></button></header><main id="app" tabindex="-1"></main><footer class="page-footer">A few words. A little progress. Every day.</footer></div>
+  <nav class="bottom-nav" aria-label="手机导航"></nav>
+  <dialog id="modal"><div id="modal-content"></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="vendor/supabase.js"></script>
+  <script type="module" src="app.js?v=20261110-4"></script>
+</body>
+</html>
