@@ -1,9 +1,9 @@
-import {cloudPanel,initCloud,notifyCloudChange} from './cloud-ui.mjs?v=20261110-4';
+import {cloudPanel,initCloud,notifyCloudChange} from './cloud-ui.mjs?v=20261110-5';
 import {lessons} from './lessons.mjs';
-import {dateKey,sessionFor,passage,canComplete,streak,validState} from './core.mjs?v=20261110-4';
+import {dateKey,sessionFor,passage,canComplete,streak,validState} from './core.mjs?v=20261110-5';
 import {parkArt} from './art.mjs';
-import {spellingHints,wordPicture} from './word-memory.mjs?v=20261110-4';
-import {loadProgress,persistProgress,checkSpelling,recordSpelling} from './progress.mjs?v=20261110-4';
+import {spellingHints,wordPicture} from './word-memory.mjs?v=20261110-5';
+import {loadProgress,persistProgress,checkSpelling,recordSpelling} from './progress.mjs?v=20261110-5';
 
 const $=s=>document.querySelector(s);
 const browserStorage={getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value)};
@@ -200,6 +200,6 @@ window.addEventListener('pagehide',()=>{stopSpeech();cleanupRecording();});
 render();if(!storageIssue&&(!loaded.found||(!hadToday&&session)))save();else if(storageIssue)toast('无法读取旧进度，已暂停覆盖。请恢复已有备份。');
 if('serviceWorker' in navigator&&isSecureContext)navigator.serviceWorker.register('./sw.js').catch(()=>toast('离线缓存未启用，联网时仍可使用。'));
 
-document.querySelector('.page-footer').textContent='词间 · 20261110-4 · 云端足迹版';
+document.querySelector('.page-footer').textContent='词间 · 20261110-5 · 云端足迹版';
 
 initCloud({storage:browserStorage,getState:()=>{if(storageIssue)throw Error('Unreadable local progress');return state;},applyState:next=>{persistProgress(browserStorage,next);state=next;storageIssue=false;saveFailed=false;today=dateKey();session=sessionFor(state,today,lessons.length);if(dialog.open)dialog.close();render();},download:(data,name)=>{const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`${name}-${dateKey()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}});

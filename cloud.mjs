@@ -1,4 +1,4 @@
-import {validState} from './core.mjs?v=20261110-4';
+import {validState} from './core.mjs?v=20261110-5';
 
 export const cloudMetaKey='wordscene-cloud-v1';
 export function hasLearning(state){

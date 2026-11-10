@@ -1,4 +1,4 @@
-import {initialState,validState} from './core.mjs?v=20261110-4';
+import {initialState,validState} from './core.mjs?v=20261110-5';
 export const storageKey='wordscene-v1';
 export function loadProgress(storage){
   try{

@@ -1,5 +1,5 @@
-import {cloudConfig} from './cloud-config.js?v=20261110-4';
-import {CloudProgress} from './cloud.mjs?v=20261110-4';
+import {cloudConfig} from './cloud-config.js?v=20261110-5';
+import {CloudProgress} from './cloud.mjs?v=20261110-5';
 
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let store,client,context;
